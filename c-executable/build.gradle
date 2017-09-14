@@ -1,0 +1,14 @@
+apply plugin : 'c' 
+
+model { 
+    components {
+        main(NativeExecutableSpec){
+
+			binaries.all {
+				// lib library: 'ncurses', linkage: 'dynamic'
+				linker.args "-lncurses"
+			}
+		
+		}
+    }
+}
