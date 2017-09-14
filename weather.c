@@ -10,7 +10,7 @@
    *       included by <termios.h> */
 #define BAUDRATE B9600
   /* change this definition for the correct port */
-#define MODEMDEVICE "/dev/ttyS0"
+#define MODEMDEVICE "/dev/ttyUSB0"
 #define _POSIX_SOURCE 1		/* POSIX compliant source */
 #define FALSE 0
 #define TRUE 1
@@ -231,6 +231,13 @@ float Read_Temperature(OBSERVER *ob,TEMP_PROBE *T)
 	return interpolate(&T->cal[0],&T->cal[1],port_val);
 
 }
+float Read_RainCount(OBSERVER *ob)
+{
+	float port_val=0;
+	port_val=Command_Observer(ob,"C 3 0");
+	
+	return (0.00544 * port_val);
+}
 float Read_Windspeed(OBSERVER *ob)
 {
 	int port_val=Command_Observer(ob,"C 0 8 6");
@@ -349,6 +356,7 @@ main ()
 	printw("\nWind\n");
 		printw("Speed = %.2f Mph %d\n",Read_Windspeed(&ob), Command_Observer(&ob,"C 0 8 6"));
 		printw("Direction = %.2f \n",Read_Winddirection(&ob));
+		printw("Rain = %.5f %d\n",Read_RainCount(&ob), Command_Observer(&ob,"C 3 0"));
 
 	printw("\nAnalogs\n");
 	for (v=0;v<8;v++)
